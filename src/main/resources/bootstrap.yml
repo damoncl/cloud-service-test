@@ -1,7 +1,4 @@
 spring:
-  sleuth:
-    sampler:
-      percentage: 1.0
   application:
     name: test-server
   cloud:
