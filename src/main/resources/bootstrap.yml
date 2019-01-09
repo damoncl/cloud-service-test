@@ -1,0 +1,22 @@
+spring:
+  sleuth:
+    sampler:
+      percentage: 1.0
+  application:
+    name: test-server
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: config-server
+      fail-fast: true
+      profile: dev
+      label: master
+      name: application,${spring.application.name}
+      username: damon
+      password: 111111
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://peer1:10001/eureka,http://peer2:10002/eureka
