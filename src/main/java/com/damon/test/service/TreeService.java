@@ -28,6 +28,53 @@ public class TreeService {
         System.out.println("后序遍历：" + Arrays.toString(lastList(createTree()).toArray()));
         System.out.println("------------------------------");
         System.out.println("层序遍历：" + Arrays.toString(layerList(createTree()).toArray()));
+        System.out.println("----------------------------------------------------------------------");
+        List<String> pre = new ArrayList<>();
+        preRecursion(createTree(), pre);
+        System.out.println("递归前序遍历：" + Arrays.toString(pre.toArray()));
+        System.out.println("------------------------------");
+        List<String> in = new ArrayList<>();
+        inRecursion(createTree(), in);
+        System.out.println("递归中序遍历：" + Arrays.toString(in.toArray()));
+        System.out.println("------------------------------");
+        List<String> behind = new ArrayList<>();
+        behindRecursion(createTree(), behind);
+        System.out.println("递归后序遍历：" + Arrays.toString(behind.toArray()));
+        System.out.println("------------------------------");
+        System.out.println("树的高度为：" + height(createTree()));
+    }
+
+    public static int height(Node node) {
+        if (node == null) {
+            return 0;
+        }
+        int left = height(node.left) + 1;
+        int right = height(node.right) + 1;
+        return Math.max(left, right);
+    }
+
+    public static void preRecursion(Node node, List<String> list) {
+        if (node != null) {
+            list.add(node.data);
+            preRecursion(node.left, list);
+            preRecursion(node.right, list);
+        }
+    }
+
+    public static void inRecursion(Node node, List<String> list) {
+        if (node != null) {
+            inRecursion(node.left, list);
+            list.add(node.data);
+            inRecursion(node.right, list);
+        }
+    }
+
+    public static void behindRecursion(Node node, List<String> list) {
+        if (node != null) {
+            behindRecursion(node.left, list);
+            behindRecursion(node.right, list);
+            list.add(node.data);
+        }
     }
 
     /**

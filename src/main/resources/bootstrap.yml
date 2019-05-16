@@ -1,19 +1,44 @@
 spring:
   application:
     name: test-server
+#  cloud:
+#    config:
+#      discovery:
+#        enabled: true
+#        service-id: config-server
+#      fail-fast: true
+#      profile: dev
+#      label: master
+#      name: application,${spring.application.name}
+#      username: damon
+#      password: 111111
+  #rabbitmq
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+  #stream
   cloud:
-    config:
-      discovery:
-        enabled: true
-        service-id: config-server
-      fail-fast: true
-      profile: dev
-      label: master
-      name: application,${spring.application.name}
-      username: damon
-      password: 111111
+    stream:
+      bindings:
+        categoryOut:
+          destination: categoryUpdate
+  #redis
+  redis:
+    database: 0
+    host: localhost
+    port: 6379
+    password:
+    jedis:
+      pool:
+        max-active: 200
+        max-wait: -1
+        max-idle: 10
+        min-idle: 0
+    timeout: 1000
 
 eureka:
   client:
     service-url:
-      defaultZone: http://peer1:10001/eureka,http://peer2:10002/eureka
+      defaultZone: http://peerlocal1:10001/eureka,http://peerlocal2:10002/eureka
