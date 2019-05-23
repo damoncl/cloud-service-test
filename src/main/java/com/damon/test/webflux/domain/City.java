@@ -9,7 +9,7 @@ import org.springframework.data.annotation.Id;
 @Setter
 @ToString
 public class City {
-    @Id
+
     private Long id;
     private Long provinceId;
     private String cityName;

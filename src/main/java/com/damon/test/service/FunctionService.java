@@ -1,7 +1,11 @@
 package com.damon.test.service;
 
-import java.util.Arrays;
-import java.util.List;
+import com.damon.test.beans.bo.base.Artist;
+import com.damon.test.util.collector.StringCollector;
+import org.springframework.util.Assert;
+
+import java.util.*;
+import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -17,7 +21,8 @@ public class FunctionService {
 //        testFunction();
 //        testStreamIte();
 //        testFlatMap();
-        testJoin();
+//        testJoin();
+        testBinaryOperator();
     }
 
     public static void testFunction() {
@@ -60,4 +65,57 @@ public class FunctionService {
         System.out.println(collect);
 
     }
+
+    public static void testBinaryOperator() {
+        BinaryOperator<Integer> binaryOperator = (x, y) -> x + y;
+        System.out.println(binaryOperator.apply(23, 56));
+
+        List<String> strings = Stream.of("a", "bbc")
+                .map(String::toUpperCase)
+                .collect(Collectors.toList());
+
+        strings.forEach(System.out::println);
+
+        Integer reduce = Stream.of(1, 2, 3)
+                .reduce(0, (x, y) -> x + y);
+
+        Stream.of(new Artist("甲壳虫乐队", "英格兰"), new Artist("青春", "china"))
+                .flatMap(artist -> Stream.of(artist.getName(), artist.getOrigin()))
+                .collect(Collectors.toList());
+
+        long count = "fewfwebFEWFWEFSefsefeWEfSEfwefwer".chars()
+                .filter(ch -> ch >= 'a' && ch <= 'z')
+                .count();
+
+        String a = Stream.of("abCE", "dfwefFWEF", "fwefwerwrSEfserFEwer", "fwerwerawerawefawe4taertoigjoer")
+                .max(Comparator.comparing(str -> str.chars()
+                        .filter(ch -> ch >= 'a' && ch <= 'z')
+                        .count()))
+                .get();
+        System.out.println("小写字母最多的：" + a);
+
+        String collect = Stream.of("甲壳虫乐队", "英格兰", "青春", "china")
+                .collect(StringCollector.of(",", "[", "]"));
+        System.out.println("my owen collector:" + collect);
+
+        Map<String, Long> collectMap = Stream.of("John", "Paul", "George", "John", "Paul", "John")
+                .collect(Collectors.groupingBy(Function.identity(), TreeMap::new, Collectors.counting()));
+        collectMap.forEach((key, value) -> {
+            System.out.print(key + " -> " + value);
+        });
+    }
+
+    public static <T, R> List<R> map(Stream<T> stream, Function<T, R> operator) {
+        return stream.reduce(new ArrayList<R>(), (List<R> list, T item) -> {
+            List<R> result = new ArrayList<>(list);
+            result.add(operator.apply(item));
+            return result;
+        }, (List<R> left, List<R> right) -> {
+            List<R> result = new ArrayList<>(left);
+            result.addAll(right);
+            return result;
+        });
+    }
+
+
 }
